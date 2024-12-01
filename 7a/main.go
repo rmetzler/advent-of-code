@@ -84,7 +84,6 @@ func NewPlayer(line string) Player {
 	s := strings.Split(line, " ")
 
 	hand := NewHand(s[0])
-	// sort.Sort(sort.Reverse(ByCardValue(hand)))
 	bid, err := strconv.Atoi(s[1])
 	if err != nil {
 		panic(err)
