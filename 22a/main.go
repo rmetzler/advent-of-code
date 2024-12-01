@@ -22,9 +22,14 @@ const (
 	Z int = 2
 )
 
+type Points []Point
+
 type Block struct {
 	start Point
 	end   Point
+	// settled *Points
+	// BlocksBelow *[]*Block
+	// BlocksAbove *[]*Block
 }
 
 func Atoi(s string) int {
@@ -91,19 +96,19 @@ func Dimensions(b Block) int {
 	return ((b.end[X]-b.start[X])*b.Direction(X) + 1) * ((b.end[Y]-b.start[Y])*b.Direction(Y) + 1) * ((b.end[Z]-b.start[Z])*b.Direction(Z) + 1)
 }
 
-func Orientation(b Block) (byte, error) {
+func (b Block) Orientation() (byte, error) {
 	direction := Point{
 		b.Direction(X),
 		b.Direction(Y),
 		b.Direction(Z),
 	}
 	switch direction {
-	case Point{0, 0, 1}, Point{0, 0, -1}:
-		return 'z', nil
+	case Point{1, 0, 0}, Point{-1, 0, 0}:
+		return 'x', nil
 	case Point{0, 1, 0}, Point{0, -1, 0}:
 		return 'y', nil
 	default:
-		return 'x', nil
+		return 'z', nil
 	}
 }
 
@@ -141,7 +146,7 @@ func (xyz *XYZSpace) Insert(b Block) {
 		}
 	}
 	newZ := slices.Max(maxNonNil) + 1
-	o, err := Orientation(b)
+	o, err := b.Orientation()
 	if err != nil {
 		panic(err)
 	}
